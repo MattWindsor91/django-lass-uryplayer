@@ -1,20 +1,11 @@
-====================
-django-lass-metadata
-====================
+=====================
+django-lass-uryplayer
+=====================
 
-``django-lass-metadata`` is the generic metadata system used by
-*LASS*, the Django-based website system that powers the University
-Radio York web presence.
-
-It provides a few models and functions that make adding arbitrary,
-key-value format metadata to existing models through a minimum of
-additional overhead.
-
-The main design decision was to provide metadata in a way that could
-be extended at the key level without changing the database structure
-and would easily be accessible from database-using applications
-outside of Django; as such, it may not be the best solution for new
-Django-specific projects.  Always read the label.
+``django-lass-uryplayer`` is the *URY Player* service, or rather the
+models and views that make it work.  It provides models and views for
+podcasts, attachments between podcasts and other models, and methods
+to group podcasts into streams (*channels*).
 
 Licence
 =======
