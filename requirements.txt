@@ -1,0 +1,4 @@
+Django>=1.4
+-e git://github.com/UniversityRadioYork/django-lass-utils.git#egg=django-lass-utils
+-e git://github.com/UniversityRadioYork/django-lass-people.git#egg=django-lass-people
+-e git://github.com/UniversityRadioYork/django-lass-metadata.git#egg=django-lass-metadata

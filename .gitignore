@@ -1,0 +1,13 @@
+.*.sw*
+*.pyc
+xapian_index
+python.core
+locale
+templates
+private/
+*.egg-info/
+src/
+_build/
+build/
+dist/
+\#*\#
