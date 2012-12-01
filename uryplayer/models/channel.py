@@ -5,11 +5,16 @@ filtering schemes based on things such like podcast metadata.
 
 """
 
+from django.conf import settings
 from django.db import models
-from metadata.models import Type, Metadata, MetadataKey
+
+from lass_utils.models.type import Type
+
 from metadata.mixins import MetadataSubjectMixin
-from uryplayer.models import PodcastMetadata, Podcast
-from urysite import model_extensions as exts
+from metadata.models.key import MetadataKey
+from metadata.models.text import TextMetadata
+
+from uryplayer.models.podcast import PodcastTextMetadata, Podcast
 
 # Match types for textual matching
 #              exact?  case-sensitive?
@@ -21,12 +26,11 @@ MATCH_TYPES = {False: {False: 'icontains',
 
 class PodcastChannel(Type, MetadataSubjectMixin):
     """A podcast channel definition."""
-
-    class Meta:
-        db_table = 'podcast_channel'
-        app_label = 'uryplayer'
-
-    id = exts.primary_key_from_meta(Meta)
+    if hasattr(settings, 'PODCAST_CHANNEL_DB_ID_COLUMN'):
+        id = models.AutoField(
+            primary_key=True,
+            db_column=settings.PODCAST_CHANNEL_DB_ID_COLUMN
+        )
 
     def metadata_strands(self):
         return {
@@ -49,19 +53,30 @@ class PodcastChannel(Type, MetadataSubjectMixin):
             result = None
         return result
 
-
-class PodcastChannelTextMetadata(Metadata):
-    """An item of text metadata associated with a channel."""
-
-    class Meta(Metadata.Meta):
-        db_table = 'podcast_channel_text_metadata'
+    class Meta:
+        if hasattr(settings, 'PODCAST_CHANNEL_DB_TABLE'):
+            db_table = settings.PODCAST_CHANNEL_DB_TABLE
         app_label = 'uryplayer'
 
-    id = exts.primary_key_from_meta(Meta)
 
-    element = models.ForeignKey(
-        PodcastChannel,
-        db_column='podcast_channel_id')
+PodcastChannelTextMetadata = TextMetadata.make_model(
+    PodcastChannel,
+    'uryplayer',
+    'PodcastChannelTextMetadata',
+    getattr(
+        settings, 'PODCAST_CHANNEL_TEXT_METADATA_DB_TABLE',
+        None
+    ),
+    getattr(
+        settings, 'PODCAST_CHANNEL_TEXT_METADATA_DB_ID_COLUMN',
+        None
+    ),
+    getattr(
+        settings, 'PODCAST_CHANNEL_TEXT_METADATA_DB_FKEY_COLUMN',
+        None
+    ),
+    'The podcast channel associated with this textual metadata.',
+)
 
 
 class PodcastChannelTextMetadataRule(models.Model):
@@ -71,10 +86,24 @@ class PodcastChannelTextMetadataRule(models.Model):
     """
 
     class Meta:
-        db_table = 'podcast_channel_text_metadata_rule'
+        if hasattr(
+            settings,
+            'PODCAST_CHANNEL_TEXT_METADATA_RULE_DB_TABLE'
+        ):
+            db_table = (
+                settings.PODCAST_CHANNEL_TEXT_METADATA_RULE_DB_TABLE
+            )
         app_label = 'uryplayer'
 
-    id = exts.primary_key_from_meta(Meta)
+    if hasattr(
+        settings,
+        'PODCAST_CHANNEL_TEXT_METADATA_RULE_DB_ID_COLUMN'
+    ):
+        st = settings.PODCAST_CHANNEL_TEXT_METADATA_RULE_DB_ID_COLUMN
+        id = models.AutoField(
+            primary_key=True,
+            db_column=st
+        )
 
     channel = models.ForeignKey(
         PodcastChannel,
@@ -108,9 +137,9 @@ class PodcastChannelTextMetadataRule(models.Model):
         filter_args = {
             'key__exact': self.key,
             'value__{0}'.format(
-                MATCH_TYPES[self.is_exact][self.is_case_sensitive]):
-                    self.value
-            }
+                MATCH_TYPES[self.is_exact][self.is_case_sensitive]
+            ): self.value
+        }
         return (PodcastMetadata.objects.filter(**filter_args)
                 .values_list('element__id', flat=True))
 

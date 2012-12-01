@@ -1,16 +1,29 @@
+"""
+This module contains the :class:`Podcast` model and support models.
+
+"""
+
 # IF YOU'RE ADDING CLASSES TO THIS, DON'T FORGET TO ADD THEM TO
 # __init__.py
 
+from django.conf import settings
 from django.db import models
-from metadata.models import Metadata, ImageMetadata
-from urysite import settings
-from urysite import model_extensions as exts
-from people.models import Person
+from metadata.models import TextMetadata, ImageMetadata
 from metadata.mixins import MetadataSubjectMixin
-from metadata.mixins import SubmittableMixin
+from lass_utils.mixins import SubmittableMixin
+from people.models import Person
 from people.mixins import ApprovableMixin
 from people.mixins import CreatableMixin
 from people.mixins import CreditableMixin
+
+
+# Make sure the database column is correctly set up for the
+# podcast foreign key.
+POD_KW = {}
+if hasattr(settings, 'PODCAST_CREDIT_DB_PODCAST_COLUMN'):
+    POD_KW['db_column'] = settings.PODCAST_CREDIT_DB_PODCAST_COLUMN
+elif hasattr(settings, 'PODCAST_CREDIT_DB_ID_COLUMN'):
+    POD_KW['db_column'] = settings.PODCAST_CREDIT_DB_ID_COLUMN
 
 
 class Podcast(MetadataSubjectMixin,
@@ -18,23 +31,27 @@ class Podcast(MetadataSubjectMixin,
               ApprovableMixin,
               CreatableMixin,
               CreditableMixin):
-    """A podcast in the URY player."""
+    """
+    A podcast in the URY player.
 
-    class Meta:
-        db_table = 'podcast'  # in schema "uryplayer"
-        ordering = ['-date_submitted']
-        get_latest_by = 'date_submitted'
-        app_label = 'uryplayer'
+    This model's primary key and database table are changeable by
+    supplying settings for ``PODCAST_DB_ID_COLUMN`` and
+    ``PODCAST_DB_TABLE`` respectively.
 
-    id = exts.primary_key_from_meta(Meta)
-
+    """
+    if hasattr(settings, 'PODCAST_DB_ID_COLUMN'):
+        id = models.AutoField(
+            primary_key=True,
+            db_column=settings.PODCAST_DB_ID_COLUMN
+        )
     people = models.ManyToManyField(
         Person,
-        through='PodcastCredit')
-
+        through='PodcastCredit'
+    )
     file = models.FileField(
         upload_to='podcasts',
-        help_text="The file containing the podcast audio.")
+        help_text="The file containing the podcast audio."
+    )
 
     ## MAGIC METHODS ##
 
@@ -48,12 +65,21 @@ class Podcast(MetadataSubjectMixin,
         return ('podcast_detail', [str(self.id)])
 
     def metadata_strands(self):
+        """
+        Returns the set of metadata strands that this podcast model
+        attaches to.
+
+        """
         return {
-            'text': self.podcastmetadata_set,
+            'text': self.podcasttextmetadata_set,
             'images': self.podcastimagemetadata_set
         }
 
     def credits_set(self):
+        """
+        Returns the related manager representing the podcast credits.
+
+        """
         return self.podcastcredit_set
 
     ## ADDITIONAL METHODS ##
@@ -77,42 +103,48 @@ class Podcast(MetadataSubjectMixin,
                     ''.join((settings.STATIC_URL, 'contrib/player.swf')),
                     'http://ury.org.uk'))
 
-    @staticmethod
-    def make_foreign_key(src_meta, db_column='podcast_id'):
-        """Shortcut for creating a field that links to a podcast, given the
-        source model's metadata class.
+    @classmethod
+    def make_foreign_key(cls):
+        """
+        Returns a model field that will create a foreign key link
+        to this model.
 
         """
-        return exts.foreign_key(src_meta, Podcast, db_column, 'podcast')
+        return models.ForeignKey(
+            cls,
+            help_text='The podcast this item relates to.',
+            **POD_KW
+        )
 
+    ## METADATA ##
 
-class PodcastMetadata(Metadata):
-    """An item of textual podcast metadata.
-
-    """
-
-    class Meta(Metadata.Meta):
-        db_table = 'podcast_metadata'
-        verbose_name = 'podcast metadatum'
-        verbose_name_plural = 'podcast metadata'
+    class Meta:
+        if hasattr(settings, 'PODCAST_DB_TABLE'):
+            db_table = settings.PODCAST_DB_TABLE
+        ordering = ['-date_submitted']
+        get_latest_by = 'date_submitted'
         app_label = 'uryplayer'
 
-    id = exts.primary_key_from_meta(Meta)
 
-    element = Podcast.make_foreign_key(Meta)
+# Automagic metadata models #
+
+PodcastTextMetadata = TextMetadata.make_model(
+    Podcast,
+    'uryplayer',
+    'PodcastTextMetadata',
+    getattr(settings, 'PODCAST_TEXT_METADATA_DB_TABLE', None),
+    getattr(settings, 'PODCAST_TEXT_METADATA_DB_ID_COLUMN', None),
+    getattr(settings, 'PODCAST_TEXT_METADATA_DB_FKEY_COLUMN', None),
+    'The podcast associated with this textual metadata.',
+)
 
 
-class PodcastImageMetadata(ImageMetadata):
-    """An item of textual podcast metadata.
-
-    """
-
-    class Meta(Metadata.Meta):
-        db_table = 'podcast_image_metadata'
-        verbose_name = 'podcast image metadatum'
-        verbose_name_plural = 'podcast image metadata'
-        app_label = 'uryplayer'
-
-    id = exts.primary_key_from_meta(Meta)
-
-    element = Podcast.make_foreign_key(Meta)
+PodcastImageMetadata = ImageMetadata.make_model(
+    Podcast,
+    'uryplayer',
+    'PodcastImageMetadata',
+    getattr(settings, 'PODCAST_IMAGE_METADATA_DB_TABLE', None),
+    getattr(settings, 'PODCAST_IMAGE_METADATA_DB_ID_COLUMN', None),
+    getattr(settings, 'PODCAST_IMAGE_METADATA_DB_FKEY_COLUMN', None),
+    'The podcast associated with this image metadata.',
+)

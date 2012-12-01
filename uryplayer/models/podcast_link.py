@@ -17,4 +17,4 @@ class PodcastLink(models.Model):
         verbose_name = 'podcast link'
         verbose_name_plural = 'podcast links'
 
-    podcast = Podcast.make_foreign_key(Meta)
+    podcast = Podcast.make_foreign_key()
