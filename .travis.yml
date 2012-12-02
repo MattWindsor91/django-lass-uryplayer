@@ -6,4 +6,9 @@ env:
 install:
   - pip install -q Django==$DJANGO_VERSION --use-mirrors
   - pip install -q -r requirements.txt --use-mirrors
+notifications:
+  irc:
+    channels:
+      - "irc.freenode.org#ury"
+    skip_join: true
 script: python manage.py test
