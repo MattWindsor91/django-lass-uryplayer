@@ -140,7 +140,7 @@ class PodcastChannelTextMetadataRule(models.Model):
                 MATCH_TYPES[self.is_exact][self.is_case_sensitive]
             ): self.value
         }
-        return (PodcastMetadata.objects.filter(**filter_args)
+        return (PodcastTextMetadata.objects.filter(**filter_args)
                 .values_list('element__id', flat=True))
 
     def matches(self):
