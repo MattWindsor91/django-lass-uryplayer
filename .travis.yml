@@ -2,7 +2,7 @@ language: python
 python:
   - "2.7"
 env:
-  - DJANGO_VERSION=1.4.2
+  - DJANGO_VERSION=1.4
 install:
   - pip install -q Django==$DJANGO_VERSION --use-mirrors
   - pip install -q -r requirements.txt --use-mirrors
@@ -11,4 +11,7 @@ notifications:
     channels:
       - "irc.freenode.org#ury"
     skip_join: true
+    template:
+      - "%{repository} (%{commit}, %{author}): %{message}"
+      - "Build details: %{build_url}"
 script: python manage.py test
