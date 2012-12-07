@@ -1,19 +1,17 @@
 from django.contrib import admin
 from metadata.admin_base import MetadataAdmin, MetadataInline
 from uryplayer.models import Podcast
-from uryplayer.models import PodcastMetadata, PodcastImageMetadata
+from uryplayer.models import PodcastTextMetadata, PodcastImageMetadata
 from uryplayer.models import PodcastChannel
 from uryplayer.models import PodcastChannelTextMetadata
 from uryplayer.models import PodcastChannelTextMetadataRule
 
 
 # METADATA
-admin.site.register(PodcastMetadata, MetadataAdmin)
-admin.site.register(PodcastImageMetadata, MetadataAdmin)
 
 
 class PodcastMetadataInline(MetadataInline):
-    model = PodcastMetadata
+    model = PodcastTextMetadata
 
 
 class PodcastImageMetadataInline(MetadataInline):
@@ -28,9 +26,6 @@ class PodcastAdmin(admin.ModelAdmin):
         PodcastMetadataInline,
         PodcastImageMetadataInline
     ]
-
-
-admin.site.register(Podcast, PodcastAdmin)
 
 
 # CHANNELS
@@ -51,4 +46,12 @@ class PodcastChannelAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(PodcastChannel, PodcastChannelAdmin)
+def register(site):
+    """
+    Registers the uryplayer admin hooks with an admin site.
+
+    """
+    site.register(PodcastTextMetadata, MetadataAdmin)
+    site.register(PodcastImageMetadata, MetadataAdmin)
+    site.register(Podcast, PodcastAdmin)
+    site.register(PodcastChannel, PodcastChannelAdmin)
