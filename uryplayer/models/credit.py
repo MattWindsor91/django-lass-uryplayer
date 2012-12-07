@@ -1,4 +1,4 @@
-"""Models concerning credits on the URY schedule."""
+"""Models concerning credits on URY podcasts."""
 
 # IF YOU'RE ADDING CLASSES TO THIS, DON'T FORGET TO ADD THEM TO
 # __init__.py
