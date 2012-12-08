@@ -1,16 +1,39 @@
 """
-This file demonstrates writing tests using the unittest module. These will pass
-when you run "manage.py test".
+Tests for the URYPlayer system.
 
-Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
+from django.contrib import admin
+
+from uryplayer.models import podcast, channel
+from uryplayer import admin as ua
 
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
+class AdminTest(TestCase):
+    """
+    Tests to make sure that the admin snap-ins validate correctly.
+
+    """
+    def setUp(self):
+        self.site = admin.AdminSite()
+
+    def test_admin_registration(self):
         """
-        Tests that 1 + 1 always equals 2.
+        Tests that registering the admin hooks with an admin site
+        yields no exceptions.
+
         """
-        self.assertEqual(1 + 1, 2)
+        ua.register(self.site)
+        self.assertTrue(
+            isinstance(
+                self.site._registry[podcast.Podcast],
+                ua.PodcastAdmin
+            )
+        )
+        self.assertTrue(
+            isinstance(
+                self.site._registry[channel.PodcastChannel],
+                ua.PodcastChannelAdmin
+            )
+        )
