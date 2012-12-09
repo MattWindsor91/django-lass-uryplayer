@@ -1,14 +1,14 @@
 """Generic abstract class for podcast link through-models."""
 
-from django.db import models
+from lass_utils.mixins import AttachableMixin
+
 from uryplayer.models import Podcast
 
 
-class PodcastLink(models.Model):
-    """A link from a model to a URY podcast.
-
-    Implementors must provide the foreign key to the linked item,
-    as well as the primary key.
+class PodcastLink(AttachableMixin):
+    """
+    A link from a model to a podcast, implemented as an
+    attachable.
 
     """
 
