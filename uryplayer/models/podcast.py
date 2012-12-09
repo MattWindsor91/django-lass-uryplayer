@@ -47,7 +47,7 @@ class Podcast(MetadataSubjectMixin,
     ## MAGIC METHODS ##
 
     def __unicode__(self):
-        return u'{0} ({1})'.format(self.title(), self.id)
+        return u'{0} ({1})'.format(self.title, self.id)
 
     ## OVERRIDES ##
 
