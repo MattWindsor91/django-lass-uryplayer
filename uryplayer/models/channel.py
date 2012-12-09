@@ -53,6 +53,25 @@ class PodcastChannel(Type, MetadataSubjectMixin):
             result = None
         return result
 
+    @classmethod
+    def make_foreign_key(cls):
+        """
+        Shortcut for creating a field that links to a show.
+
+        """
+        _FKEY_KWARGS = {}
+        if hasattr(settings, 'PODCAST_CHANNEL_DB_FKEY_COLUMN'):
+            _FKEY_KWARGS['db_column'] = (
+                settings.PODCAST_CHANNEL_DB_FKEY_COLUMN
+            )
+        return models.ForeignKey(
+            cls,
+            help_text=(
+                'The podcast channel associated with this item.'
+            ),
+            **_FKEY_KWARGS
+        )
+
     class Meta:
         if hasattr(settings, 'PODCAST_CHANNEL_DB_TABLE'):
             db_table = settings.PODCAST_CHANNEL_DB_TABLE
@@ -71,11 +90,8 @@ PodcastChannelTextMetadata = TextMetadata.make_model(
         settings, 'PODCAST_CHANNEL_TEXT_METADATA_DB_ID_COLUMN',
         None
     ),
-    getattr(
-        settings, 'PODCAST_CHANNEL_TEXT_METADATA_DB_FKEY_COLUMN',
-        None
-    ),
-    'The podcast channel associated with this textual metadata.',
+    help_text='The podcast channel associated with this metadata.',
+    fkey=PodcastChannel.make_foreign_key(),
 )
 
 

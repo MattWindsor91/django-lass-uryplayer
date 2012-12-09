@@ -17,15 +17,6 @@ from people.mixins import CreatableMixin
 from people.mixins import CreditableMixin
 
 
-# Make sure the database column is correctly set up for the
-# podcast foreign key.
-POD_KW = {}
-if hasattr(settings, 'PODCAST_CREDIT_DB_PODCAST_COLUMN'):
-    POD_KW['db_column'] = settings.PODCAST_CREDIT_DB_PODCAST_COLUMN
-elif hasattr(settings, 'PODCAST_CREDIT_DB_ID_COLUMN'):
-    POD_KW['db_column'] = settings.PODCAST_CREDIT_DB_ID_COLUMN
-
-
 class Podcast(MetadataSubjectMixin,
               SubmittableMixin,
               ApprovableMixin,
@@ -106,14 +97,18 @@ class Podcast(MetadataSubjectMixin,
     @classmethod
     def make_foreign_key(cls):
         """
-        Returns a model field that will create a foreign key link
-        to this model.
+        Shortcut for creating a field that links to a podcast.
 
         """
+        _FKEY_KWARGS = {}
+        if hasattr(settings, 'PODCAST_DB_FKEY_COLUMN'):
+            _FKEY_KWARGS['db_column'] = (
+                settings.PODCAST_DB_FKEY_COLUMN
+            )
         return models.ForeignKey(
             cls,
-            help_text='The podcast this item relates to.',
-            **POD_KW
+            help_text='The podcast associated with this item.',
+            **_FKEY_KWARGS
         )
 
     ## METADATA ##
@@ -134,8 +129,8 @@ PodcastTextMetadata = TextMetadata.make_model(
     'PodcastTextMetadata',
     getattr(settings, 'PODCAST_TEXT_METADATA_DB_TABLE', None),
     getattr(settings, 'PODCAST_TEXT_METADATA_DB_ID_COLUMN', None),
-    getattr(settings, 'PODCAST_TEXT_METADATA_DB_FKEY_COLUMN', None),
-    'The podcast associated with this textual metadata.',
+    help_text='The podcast associated with this textual metadata.',
+    fkey=Podcast.make_foreign_key()
 )
 
 
@@ -146,5 +141,6 @@ PodcastImageMetadata = ImageMetadata.make_model(
     getattr(settings, 'PODCAST_IMAGE_METADATA_DB_TABLE', None),
     getattr(settings, 'PODCAST_IMAGE_METADATA_DB_ID_COLUMN', None),
     getattr(settings, 'PODCAST_IMAGE_METADATA_DB_FKEY_COLUMN', None),
-    'The podcast associated with this image metadata.',
+    help_text='The podcast associated with this image metadata.',
+    fkey=Podcast.make_foreign_key()
 )
