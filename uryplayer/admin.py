@@ -1,9 +1,11 @@
 from django.contrib import admin
 from metadata.admin_base import TextMetadataInline
 from metadata.admin_base import ImageMetadataInline
+from metadata.admin_base import PackageEntryInline
 from metadata.admin_base import MetadataAdmin
 from uryplayer.models import Podcast
 from uryplayer.models import PodcastTextMetadata, PodcastImageMetadata
+from uryplayer.models import PodcastPackageEntry
 from uryplayer.models import PodcastChannel
 from uryplayer.models import PodcastChannelTextMetadata
 from uryplayer.models import PodcastChannelTextMetadataRule
@@ -20,13 +22,17 @@ class PodcastImageMetadataInline(ImageMetadataInline):
     model = PodcastImageMetadata
 
 
+class PodcastPackageEntryInline(PackageEntryInline):
+    model = PodcastPackageEntry
+
 # PODCAST
 
 class PodcastAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'date_submitted', 'id')
     inlines = [
         PodcastTextMetadataInline,
-        PodcastImageMetadataInline
+        PodcastImageMetadataInline,
+        PodcastPackageEntryInline,
     ]
 
     # These are needed because title and description are pseudo
