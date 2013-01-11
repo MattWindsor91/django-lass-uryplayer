@@ -30,9 +30,9 @@ class PodcastPackageEntryInline(PackageEntryInline):
 class PodcastAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'date_submitted', 'id')
     inlines = [
+        PodcastPackageEntryInline,
         PodcastTextMetadataInline,
         PodcastImageMetadataInline,
-        PodcastPackageEntryInline,
     ]
 
     # These are needed because title and description are pseudo
