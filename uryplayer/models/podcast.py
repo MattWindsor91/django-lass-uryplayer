@@ -102,7 +102,7 @@ class Podcast(MetadataSubjectMixin,
                 u' type="application/x-shockwave-flash">'
                 .format(
                     self.file.url,
-                    self.metadata()['images']['player_image'].url,
+                    self.metadata()['image']['player_image'].url,
                     ''.join((settings.STATIC_URL, 'contrib/player.swf')),
                     'http://ury.org.uk'))
 
