@@ -9,7 +9,7 @@ This module contains the :class:`Podcast` model and support models.
 from django.conf import settings
 from django.db import models
 from metadata.models import TextMetadata, ImageMetadata
-from metadata.models import Package, PackageEntry
+from metadata.models import PackageEntry
 from metadata.mixins import MetadataSubjectMixin
 from lass_utils.mixins import SubmittableMixin
 from people.models import Person
