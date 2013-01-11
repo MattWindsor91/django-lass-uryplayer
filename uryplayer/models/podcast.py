@@ -9,6 +9,7 @@ This module contains the :class:`Podcast` model and support models.
 from django.conf import settings
 from django.db import models
 from metadata.models import TextMetadata, ImageMetadata
+from metadata.models import Package, PackageEntry
 from metadata.mixins import MetadataSubjectMixin
 from lass_utils.mixins import SubmittableMixin
 from people.models import Person
@@ -42,6 +43,10 @@ class Podcast(MetadataSubjectMixin,
     file = models.FileField(
         upload_to='podcasts',
         help_text="The file containing the podcast audio."
+    )
+    packages = models.ManyToManyField(
+        Package,
+        through='PodcastPackageEntry'
     )
 
     ## MAGIC METHODS ##
@@ -126,6 +131,16 @@ class Podcast(MetadataSubjectMixin,
 
 # Automagic metadata models #
 
+PodcastPackageEntry = PackageEntry.make_model(
+    Podcast,
+    'uryplayer',
+    'PodcastPackageEntry',
+    getattr(settings, 'PODCAST_PACKAGE_ENTRY_DB_TABLE', None),
+    getattr(settings, 'PODCAST_PACKAGE_ENTRY_DB_ID_COLUMN', None),
+    help_text='The podcast associated with this package entry.',
+    fkey=Podcast.make_foreign_key()
+)
+
 PodcastTextMetadata = TextMetadata.make_model(
     Podcast,
     'uryplayer',
@@ -135,7 +150,6 @@ PodcastTextMetadata = TextMetadata.make_model(
     help_text='The podcast associated with this textual metadata.',
     fkey=Podcast.make_foreign_key()
 )
-
 
 PodcastImageMetadata = ImageMetadata.make_model(
     Podcast,
