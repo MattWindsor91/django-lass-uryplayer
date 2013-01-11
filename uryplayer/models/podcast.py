@@ -67,7 +67,7 @@ class Podcast(MetadataSubjectMixin,
         """
         return {
             'text': self.podcasttextmetadata_set,
-            'images': self.podcastimagemetadata_set
+            'image': self.podcastimagemetadata_set
         }
 
     def packages(self):
