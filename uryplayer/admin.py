@@ -1,5 +1,7 @@
 from django.contrib import admin
-from metadata.admin_base import MetadataAdmin, MetadataInline
+from metadata.admin_base import TextMetadataInline
+from metadata.admin_base import ImageMetadataInline
+from metadata.admin_base import MetadataAdmin
 from uryplayer.models import Podcast
 from uryplayer.models import PodcastTextMetadata, PodcastImageMetadata
 from uryplayer.models import PodcastChannel
@@ -10,11 +12,11 @@ from uryplayer.models import PodcastChannelTextMetadataRule
 # METADATA
 
 
-class PodcastMetadataInline(MetadataInline):
+class PodcastTextMetadataInline(TextMetadataInline):
     model = PodcastTextMetadata
 
 
-class PodcastImageMetadataInline(MetadataInline):
+class PodcastImageMetadataInline(ImageMetadataInline):
     model = PodcastImageMetadata
 
 
@@ -23,7 +25,7 @@ class PodcastImageMetadataInline(MetadataInline):
 class PodcastAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'date_submitted', 'id')
     inlines = [
-        PodcastMetadataInline,
+        PodcastTextMetadataInline,
         PodcastImageMetadataInline
     ]
 
@@ -39,7 +41,7 @@ class PodcastAdmin(admin.ModelAdmin):
 
 # CHANNELS
 
-class PodcastChannelTextMetadataInline(admin.TabularInline):
+class PodcastChannelTextMetadataInline(TextMetadataInline):
     model = PodcastChannelTextMetadata
 
 
