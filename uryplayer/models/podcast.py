@@ -87,25 +87,6 @@ class Podcast(MetadataSubjectMixin,
 
     ## ADDITIONAL METHODS ##
 
-    def embed_code(self):
-        """Returns HTML code that can be used to embed this podcast
-        in an arbitrary page.
-
-        """
-        return (u'<embed height="300"'
-                u' width="400"'
-                u' flashvars="autostart=false&file={0}&image={3}{1}'
-                u'&displayheight=300&width=400&height=300"'
-                u' allowfullscreen="false"'
-                u' quality="high"'
-                u' src="{3}{2}"'
-                u' type="application/x-shockwave-flash">'
-                .format(
-                    self.file.url,
-                    self.metadata()['image']['player_image'].url,
-                    ''.join((settings.STATIC_URL, 'contrib/player.swf')),
-                    'http://ury.org.uk'))
-
     @classmethod
     def make_foreign_key(cls):
         """
