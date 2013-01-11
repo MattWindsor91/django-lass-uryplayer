@@ -44,10 +44,6 @@ class Podcast(MetadataSubjectMixin,
         upload_to='podcasts',
         help_text="The file containing the podcast audio."
     )
-    packages = models.ManyToManyField(
-        Package,
-        through='PodcastPackageEntry'
-    )
 
     ## MAGIC METHODS ##
 
@@ -73,6 +69,14 @@ class Podcast(MetadataSubjectMixin,
             'text': self.podcasttextmetadata_set,
             'images': self.podcastimagemetadata_set
         }
+
+    def packages(self):
+        """
+        Returns the set of package entries attached to a
+        podcast.
+
+        """
+        return self.podcastpackageentry_set
 
     def credits_set(self):
         """
