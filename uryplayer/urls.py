@@ -14,4 +14,10 @@ urlpatterns = patterns(
     url(r'^podcasts/(?P<pk>\d+)/$',
         DetailView.as_view(model=Podcast),
         name='podcast_detail'),
+    url(r'^podcasts/(?P<pk>\d+)/player$',
+        DetailView.as_view(
+            model=Podcast,
+            template_name="uryplayer/podcast_player.html"
+        ),
+        name='podcast_player'),
 )
