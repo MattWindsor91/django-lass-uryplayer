@@ -90,7 +90,6 @@ PodcastChannelTextMetadata = TextMetadata.make_model(
         settings, 'PODCAST_CHANNEL_TEXT_METADATA_DB_ID_COLUMN',
         None
     ),
-    help_text='The podcast channel associated with this metadata.',
     fkey=PodcastChannel.make_foreign_key(),
 )
 

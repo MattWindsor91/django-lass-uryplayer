@@ -122,7 +122,6 @@ PodcastPackageEntry = PackageEntry.make_model(
     'PodcastPackageEntry',
     getattr(settings, 'PODCAST_PACKAGE_ENTRY_DB_TABLE', None),
     getattr(settings, 'PODCAST_PACKAGE_ENTRY_DB_ID_COLUMN', None),
-    help_text='The podcast associated with this package entry.',
     fkey=Podcast.make_foreign_key()
 )
 
@@ -132,7 +131,6 @@ PodcastTextMetadata = TextMetadata.make_model(
     'PodcastTextMetadata',
     getattr(settings, 'PODCAST_TEXT_METADATA_DB_TABLE', None),
     getattr(settings, 'PODCAST_TEXT_METADATA_DB_ID_COLUMN', None),
-    help_text='The podcast associated with this textual metadata.',
     fkey=Podcast.make_foreign_key()
 )
 
@@ -142,7 +140,5 @@ PodcastImageMetadata = ImageMetadata.make_model(
     'PodcastImageMetadata',
     getattr(settings, 'PODCAST_IMAGE_METADATA_DB_TABLE', None),
     getattr(settings, 'PODCAST_IMAGE_METADATA_DB_ID_COLUMN', None),
-    getattr(settings, 'PODCAST_IMAGE_METADATA_DB_FKEY_COLUMN', None),
-    help_text='The podcast associated with this image metadata.',
     fkey=Podcast.make_foreign_key()
 )
