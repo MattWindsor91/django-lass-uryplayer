@@ -88,7 +88,7 @@ class Podcast(MetadataSubjectMixin,
     ## ADDITIONAL METHODS ##
 
     @classmethod
-    def make_foreign_key(cls):
+    def make_foreign_key(cls, nullable=False):
         """
         Shortcut for creating a field that links to a podcast.
 
@@ -98,6 +98,9 @@ class Podcast(MetadataSubjectMixin,
             _FKEY_KWARGS['db_column'] = (
                 settings.PODCAST_DB_FKEY_COLUMN
             )
+        if nullable:
+            _FKEY_KWARGS['null'] = True
+            _FKEY_KWARGS['blank'] = True
         return models.ForeignKey(
             cls,
             help_text='The podcast associated with this item.',
@@ -131,7 +134,7 @@ PodcastTextMetadata = TextMetadata.make_model(
     'PodcastTextMetadata',
     getattr(settings, 'PODCAST_TEXT_METADATA_DB_TABLE', None),
     getattr(settings, 'PODCAST_TEXT_METADATA_DB_ID_COLUMN', None),
-    fkey=Podcast.make_foreign_key()
+    fkey=Podcast.make_foreign_key(nullable=True)
 )
 
 PodcastImageMetadata = ImageMetadata.make_model(
@@ -140,5 +143,5 @@ PodcastImageMetadata = ImageMetadata.make_model(
     'PodcastImageMetadata',
     getattr(settings, 'PODCAST_IMAGE_METADATA_DB_TABLE', None),
     getattr(settings, 'PODCAST_IMAGE_METADATA_DB_ID_COLUMN', None),
-    fkey=Podcast.make_foreign_key()
+    fkey=Podcast.make_foreign_key(nullable=True)
 )
