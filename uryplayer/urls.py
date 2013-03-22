@@ -21,5 +21,5 @@ urlpatterns = patterns(
             template_name="uryplayer/podcast_player.html"
         ),
         name='podcast_player'),
-    url(r'^feed/latest$', LatestPodcastssFeed()),
+    url(r'^feed/latest$', LatestPodcastsFeed()),
 )
