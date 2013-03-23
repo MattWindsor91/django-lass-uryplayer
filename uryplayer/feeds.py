@@ -44,10 +44,7 @@ class iTunesPodcastPost():
   
   def __unicode__(self):
     return "Podcast: %s" % self.title
-  
-  @permalink
-  def get_absolute_url(self):
-    return self.url
+
 
 
 class iTunesPodcastsFeed(Feed):
@@ -85,6 +82,9 @@ class iTunesPodcastsFeed(Feed):
 
   def item_extra_kwargs(self, item):
     return {'summary':item.summary, 'explicit':item.explicit, 'iTunes_image_url':item.iTunes_image_url}
+
+  def item_url(self, item):
+    return item.get_absolute_url
 
   def item_pubdate(self, item):
     return item.date_submitted
