@@ -1,5 +1,4 @@
 from django.contrib.syndication.views import Feed
-from django.core.urlresolvers import reverse
 from uryplayer.models import Podcast
 
 class LatestPodcastsFeed(Feed):
@@ -15,3 +14,17 @@ class LatestPodcastsFeed(Feed):
 
     def item_description(self, item):
         return item.description
+
+    def item_url(self, item):
+        return item.get_absolute_url
+
+    def item_enclosure_url(self, item):
+        return item.file.url
+
+    def item_enclosure_length(self, item):
+        return item.file.url.size
+
+    item_enclosure_mime_type = "audio/mpeg"
+
+    def item_pubDate(self, item):
+        return item.date_submitted
