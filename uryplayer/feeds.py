@@ -19,7 +19,7 @@ class LatestPodcastsFeed(Feed):
         return item.get_absolute_url
 
     def item_enclosure_url(self, item):
-        return item.file.url
+        return website.root + item.file.url
 
     def item_enclosure_length(self, item):
         return item.file.size
