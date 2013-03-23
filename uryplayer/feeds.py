@@ -25,7 +25,6 @@ class iTunesPodcastsFeedGenerator(Rss201rev2Feed):
   def add_item_elements(self,  handler, item):
     super(iTunesPodcastsFeedGenerator, self).add_item_elements(handler, item)
     handler.addQuickElement(u'itunes:summary',item['summary'])
-    handler.addQuickElement(u'itunes:duration',item['duration'])
     handler.addQuickElement(u'itunes:explicit',item['explicit'])
     handler.addQuickElement(u'itunes:image', item['iTunes_image_url'])
 
@@ -84,7 +83,6 @@ class iTunesPodcastsFeed(Feed):
 
   def item_extra_kwargs(self, item):
     return {'summary':item.summary, 'explicit':item.explicit, 'iTunes_image_url':item.iTunes_image_url}
-
 
   def item_pubdate(self, item):
     return item.date_submitted
