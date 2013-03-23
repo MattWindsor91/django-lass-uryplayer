@@ -25,7 +25,7 @@ class LatestPodcastsFeed(Feed):
         return current_site.domain + item.file.url
 
     def item_enclosure_length(self, item):
-        return current_site.domain + item.file.size
+        return item.file.size
 
     item_enclosure_mime_type = "audio/mpeg"
 
