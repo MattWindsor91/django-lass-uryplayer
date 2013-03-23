@@ -38,7 +38,6 @@ class iTunesPodcastPost():
     self.enclosure_url = 'http://' + current_site.domain + podcast.file.url
     self.enclosure_length = podcast.file.size
     self.enclosure_mime_type = u'audio/mpeg'
-    self.duration = podcast.duration
     self.explicit = u'no'
     self.url = podcast.get_absolute_url
     self.iTunes_image_url = 'http://' + current_site.domain + '/media/' + podcast.thumbnail_image
@@ -85,7 +84,7 @@ class iTunesPodcastsFeed(Feed):
     return extra
 
   def item_extra_kwargs(self, item):
-    return {'summary':item.summary, 'duration':item.duration, 'explicit':item.explicit, 'iTunes_image_url':item.iTunes_image_url}
+    return {'summary':item.summary, 'explicit':item.explicit, 'iTunes_image_url':item.iTunes_image_url}
 
   def item_pubdate(self, item):
     return item.date_submitted
