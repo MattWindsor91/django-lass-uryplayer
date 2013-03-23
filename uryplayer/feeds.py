@@ -22,10 +22,10 @@ class LatestPodcastsFeed(Feed):
         return item.get_absolute_url
 
     def item_enclosure_url(self, item):
-        return STATIC_URL + item.file.url
+        return current_site.domain + item.file.url
 
     def item_enclosure_length(self, item):
-        return STATIC_URL + item.file.size
+        return current_site.domain + item.file.size
 
     item_enclosure_mime_type = "audio/mpeg"
 
