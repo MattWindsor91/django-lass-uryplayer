@@ -29,5 +29,5 @@ class LatestPodcastsFeed(Feed):
 
     item_enclosure_mime_type = "audio/mpeg"
 
-    def item_pubDate(self, item):
+    def item_pubdate(self, item):
         return item.date_submitted
