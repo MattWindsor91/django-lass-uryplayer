@@ -1,5 +1,8 @@
 from django.contrib.syndication.views import Feed
+from django.contrib.sites.models import Site
 from uryplayer.models import Podcast
+
+current_site = Site.objects.get_current()
 
 class LatestPodcastsFeed(Feed):
     title = "URY Player"
@@ -19,7 +22,7 @@ class LatestPodcastsFeed(Feed):
         return item.get_absolute_url
 
     def item_enclosure_url(self, item):
-        return website.root + item.file.url
+        return current_site.domain + item.file.url
 
     def item_enclosure_length(self, item):
         return item.file.size
