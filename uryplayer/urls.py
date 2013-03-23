@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView
 from uryplayer.views import podcast_channel_latest
 from uryplayer.models import Podcast
 from uryplayer.feeds import LatestPodcastsFeed
+from uryplayer.feeds import iTunesPodcastsFeed
 
 urlpatterns = patterns(
     'uryplayer.views',
@@ -22,4 +23,5 @@ urlpatterns = patterns(
         ),
         name='podcast_player'),
     url(r'^feed/latest$', LatestPodcastsFeed()),
+    url(r'^feed/itunes$', iTunesPodcastsFeed()),
 )
