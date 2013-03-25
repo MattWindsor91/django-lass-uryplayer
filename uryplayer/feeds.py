@@ -45,7 +45,7 @@ class iTunesPodcastPost():
     return "Podcast: %s" % self.title
 
   def get_absolute_url(self):
-    return u'http://ury'
+    return self.url
 
 
 class iTunesPodcastsFeed(Feed):
