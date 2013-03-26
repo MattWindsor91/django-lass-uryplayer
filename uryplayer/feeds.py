@@ -34,12 +34,12 @@ class iTunesPodcastPost():
     self.date_submitted = podcast.date_submitted
     self.title = podcast.title
     self.summary = podcast.description
-    self.enclosure_url = 'http://' + current_site.domain + podcast.file.url
+    self.enclosure_url = u'http://' + current_site.domain + podcast.file.url
     self.enclosure_length = podcast.file.size
     self.enclosure_mime_type = u'audio/mpeg'
     self.explicit = u'no'
     self.url = podcast.get_absolute_url
-    self.iTunes_image_url = 'http://' + current_site.domain + '/media/' + podcast.thumbnail_image
+    self.iTunes_image_url = u'http://' + current_site.domain + u'/media/' + podcast.thumbnail_image
   
   def __unicode__(self):
     return "Podcast: %s" % self.title
