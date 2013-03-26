@@ -99,6 +99,8 @@ class iTunesPodcastsFeed(Feed):
   def item_description(self, item):
     return item.summary
 
+  def item_title(self, item):
+    return u'%s' % item.title
 
 
 current_site = Site.objects.get_current()
