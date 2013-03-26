@@ -20,13 +20,13 @@ class iTunesPodcastsFeedGenerator(Rss201rev2Feed):
     handler.addQuickElement(u'itunes:name', self.feed['iTunes_name'])
     handler.addQuickElement(u'itunes:email', self.feed['iTunes_email'])
     handler.endElement(u"itunes:owner")
-    handler.addQuickElement(u'itunes:image', self.feed['iTunes_image_url'])
+    handler.addQuickElement(u'itunes:image', attrs={'href': self.feed['iTunes_image_url']})
 
   def add_item_elements(self,  handler, item):
     super(iTunesPodcastsFeedGenerator, self).add_item_elements(handler, item)
     handler.addQuickElement(u'itunes:summary',item['summary'])
     handler.addQuickElement(u'itunes:explicit',item['explicit'])
-    handler.addQuickElement(u'itunes:image', item['iTunes_image_url'])
+    handler.addQuickElement(u'itunes:image', attrs={'href': self.feed['iTunes_image_url']})
 
 class iTunesPodcastPost():
   def __init__(self, podcast):
